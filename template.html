@@ -1,0 +1,55 @@
+<div ng-show="surveyCreating">
+	<li ng-repeat="question in questions">
+		<h2>
+			{{$index + 1}}. {{question.question}} Options: {{question.options.join(',')}} Type: {{question.type}}
+		</h2>
+	</li>
+	<form name="quizForm" ng-submit="addQuestion(formQuestion, formOptions, formType)">
+    Question:<input id='questionInput' type="text" ng-model="formQuestion" required ng-minlength=1 /></br>
+
+    Type:
+    	<label><input type="radio" ng-model="formType" value="radio" ng-required="!formType" ng-click="textUnclick()">Radio</label>
+    	<label><input type="radio" ng-model="formType" value="checkbox" ng-required="!formType" ng-click="textUnclick()">Checkbox</label>
+    	<label><input type="radio" ng-model="formType" value="text" ng-required="!formType" ng-click="textClick()">Text</label></br>
+
+    Options(Split by Comma):<input id='optionInput' type="text" ng-model="formOptions" required ng-minlength=1 /></br>
+    <button class="btn" type="submit">Add</button>
+    <br/>
+	</form>
+</div>
+
+
+<div class="survey-area" ng-show="inProgress">
+	<div ng-show="!surveyOver">
+		<form name='question' ng-submit="checkAnswer()">
+			<h2 id="question">{{question}}</h2>
+			<ul id="options">
+				<li ng-repeat="option in options">
+					<label>
+						<input type="{{type}}" name="answer" value="{{option}}" ng-model="myAnswer">
+						{{option}}</option>
+					</label>
+				</li>
+			</ul>
+			<button type="submit" ng-show="answerMode">Submit</button>
+		</form>
+
+	</div>
+
+	<div ng-show="surveyOver">
+		<h2>Survey is over</h2>
+		<ul id='summary'>
+			<li ng-repeat="question in questions">
+				<h2>{{$index + 1}}. {{question.question}}</h2>
+				<h3>Ans: {{question.myAns}}</h3>
+			</li>
+		</ul>
+	</div>
+
+</div>
+
+<div class="intro" ng-show="!inProgress">
+	<button id="startSurvey" ng-click="start()" ng-show="surveyCreated">Start the Survey</button>
+	<button id="createSurvey" ng-click="create()" ng-show="!surveyCreated&&!surveyCreating">Create a Survey</button>
+	<button id="endCreating" ng-click="endCreating()" ng-show="!surveyCreated&&surveyCreating">Done</button>
+</div>
